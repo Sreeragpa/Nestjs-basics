@@ -22,9 +22,9 @@ export class AppService {
     return
   }
 
-   createUser(data: CreateUserDto): string{
+   createUser(data: CreateUserDto){
     console.log("User Created"+data.email);
-    const newUser =  new this.userModel(data)
-    return "Successfull"
+    const newUser =  new this.userModel(data);
+    return newUser.save()
   }
 }

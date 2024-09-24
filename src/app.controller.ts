@@ -13,7 +13,7 @@ export class AppController {
 
   @Post()
   @UsePipes(new ValidationPipe())
-  saveData(@Body() createUserData: CreateUserDto): string{
+  saveData(@Body() createUserData: CreateUserDto){
     console.log(createUserData);
     return this.appService.createUser(createUserData)
   }
