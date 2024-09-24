@@ -1,7 +1,12 @@
 import { Injectable } from '@nestjs/common';
+import { CreateUserDto } from './dto/user.dt';
+import { InjectModel } from '@nestjs/mongoose';
+import { User } from './schemas/user.schema';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class AppService {
+  constructor(@InjectModel(User.name) private userModel: Model<User>){}
   getHello(): string {
     return 'Hello World!';
   }
@@ -15,5 +20,11 @@ export class AppService {
   getUserbyId(id: string){
     console.log(`User with id:${id}`);
     return
+  }
+
+   createUser(data: CreateUserDto): string{
+    console.log("User Created"+data.email);
+    const newUser =  new this.userModel(data)
+    return "Successfull"
   }
 }

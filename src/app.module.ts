@@ -2,13 +2,23 @@ import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { LoggingMiddleware } from './logging.middleware';
+import { MongooseCoreModule } from './mongoose-core-module';
+import { MongooseModule } from '@nestjs/mongoose';
+import { User, UserSchema } from './schemas/user.schema';
 
 @Module({
-  imports: [],
-  controllers: [AppController],
+  imports: [
+   MongooseCoreModule,
+   MongooseModule.forFeature([{
+    name:User.name,
+    schema: UserSchema
+   }])
+  ],
+  controllers: [AppController], 
   providers: [AppService],
 })
 export class AppModule implements NestModule {
+
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(LoggingMiddleware)
