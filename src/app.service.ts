@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/user.dt';
+import { CreateUserDto, UpdateUserDto } from './dto/user.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from './schemas/user.schema';
 import { Model } from 'mongoose';
@@ -7,10 +7,6 @@ import { Model } from 'mongoose';
 @Injectable()
 export class AppService {
   constructor(@InjectModel(User.name) private userModel: Model<User>){}
-  getHello(): string {
-    return 'Hello World!';
-  }
-
 
   saveData(name: string):string{
     console.log(`${name} Saved`);
@@ -18,13 +14,24 @@ export class AppService {
   }
 
   getUserbyId(id: string){
-    console.log(`User with id:${id}`);
-    return
+    return this.userModel.findById(id)
   }
 
    createUser(data: CreateUserDto){
     console.log("User Created"+data.email);
     const newUser =  new this.userModel(data);
     return newUser.save()
+  }
+
+  getUsers(){
+    return this.userModel.find()
+  }
+
+  updateUser(id: string, data: UpdateUserDto){
+    return this.userModel.findByIdAndUpdate(id,{$set:{email:data.email}},{new:true})
+  }
+
+  deleteUser(id: string){
+    return this.userModel.findByIdAndDelete(id)
   }
 }
